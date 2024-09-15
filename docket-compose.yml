@@ -1,0 +1,24 @@
+services:
+  postgresql:
+    image: postgres
+    container_name: TicketMasterDatabasePostgresql
+    environment:
+      POSTGRES_USER: mu23
+      POSTGRES_PASSWORD: 12345
+      POSTGRES_DB: TicketBooking
+      PGDATA: /data/postgres
+    volumes:
+      - postgres:/daa/postgres
+    ports:
+      - "5423:5432"
+    networks:
+      - TicketMaster
+    restart: unless-stopped
+
+
+networks:
+  TicketMaster:
+    driver: bridge
+
+volumes:
+  postgres:
