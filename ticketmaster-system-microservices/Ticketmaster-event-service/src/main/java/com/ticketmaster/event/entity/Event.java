@@ -9,6 +9,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -32,10 +33,10 @@ public class Event {
     private String description;
 
     @Column(name = "start_time", nullable = false)
-    private Time startTime;
+    private LocalDateTime startTime;
 
     @Column(name = "end_time", nullable = false)
-    private Time endTime;
+    private LocalDateTime endTime;
 
     @Column(name = "available_seats", nullable = false)
     private Integer availableSeats;
