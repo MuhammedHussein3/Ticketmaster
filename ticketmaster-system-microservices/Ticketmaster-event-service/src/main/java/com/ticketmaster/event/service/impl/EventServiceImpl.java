@@ -11,9 +11,11 @@ import com.ticketmaster.event.exceptions.EventCreationException;
 import com.ticketmaster.event.exceptions.EventNotFoundException;
 import com.ticketmaster.event.repository.CategoryRepository;
 import com.ticketmaster.event.repository.VenueRepository;
+import com.ticketmaster.event.service.CategoryService;
 import com.ticketmaster.event.service.EventService;
 import  com.ticketmaster.event.repository.EventRepository;
 import com.ticketmaster.event.mapper.EventMapper;
+import com.ticketmaster.event.service.VenueService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -45,36 +47,29 @@ import org.springframework.stereotype.Service;
 public class EventServiceImpl implements EventService {
 
     private final EventRepository eventRepository;
-    private final CategoryRepository categoryRepository;
-    private final VenueRepository venueRepository;
+    private final CategoryService categoryService;
+    private final VenueService venueService;
     private final EventMapper eventMapper;
 
     @Override
     public EventCreateResponse createEvent(EventCreateRequest eventCreatedRequest) throws EventCreationException {
 
-        Category category = categoryRepository.findById(eventCreatedRequest.categoryId()).get();
-        Venue venue = venueRepository.findById(eventCreatedRequest.venueId()).get();
+        Category category = categoryService.getCategory();
+        Venue venue = venueService.getVenue();
 
-        Event event = Event.builder().name(eventCreatedRequest.name())
-                .availableSeats(eventCreatedRequest.availableSeats())
-                .description(eventCreatedRequest.description())
-                .startTime(eventCreatedRequest.startTime())
-                .endTime(eventCreatedRequest.endTime())
-                .category(category)
-                .venue(venue)
-                .build();
+        Event event = mapToEvent(eventCreatedRequest);
 
         Event savedEntity = eventRepository.save(event);
 
-        return EventCreateResponse.builder()
-                .name(savedEntity.getName())
-                .description(savedEntity.getDescription())
-                .startTime(savedEntity.getStartTime())
-                .endTime(savedEntity.getEndTime())
-                .availableSeats(savedEntity.getAvailableSeats())
-                .venueId(venue.getId())
-                .categoryId(category.getId())
-                .build();
+        return mapToEventCreateResponse(savedEntity);
+    }
+
+    private Event mapToEvent(EventCreateRequest eventCreateRequest){
+        return eventMapper.mapToEvent(eventCreateRequest);
+    }
+
+    private EventCreateResponse mapToEventCreateResponse(Event createEvent){
+        return eventMapper.mapToEventCreateResponse(createEvent);
     }
 
     @Override
