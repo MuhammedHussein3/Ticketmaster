@@ -9,8 +9,6 @@ import com.ticketmaster.event.entity.Event;
 import com.ticketmaster.event.entity.Venue;
 import com.ticketmaster.event.exceptions.EventCreationException;
 import com.ticketmaster.event.exceptions.EventNotFoundException;
-import com.ticketmaster.event.repository.CategoryRepository;
-import com.ticketmaster.event.repository.VenueRepository;
 import com.ticketmaster.event.service.CategoryService;
 import com.ticketmaster.event.service.EventService;
 import  com.ticketmaster.event.repository.EventRepository;
@@ -76,17 +74,10 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventResponse getEvent(Long eventId) throws EventNotFoundException {
-        Event event = findEventById(eventId);
-        return EventResponse.builder()
-                .name(event.getName())
-                .description(event.getDescription())
-                .availableSeats(event.getAvailableSeats())
-                .startTime(event.getStartTime())
-                .endTime(event.getEndTime())
-                .category(event.getCategory())
-                .venue(event.getVenue())
-                .build();
 
+        Event event = findEventById(eventId);
+
+        return mapToEventResponse(event);
     }
 
     @Override
