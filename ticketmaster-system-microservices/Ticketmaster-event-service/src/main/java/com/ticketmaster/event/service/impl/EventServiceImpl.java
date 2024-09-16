@@ -16,6 +16,7 @@ import com.ticketmaster.event.service.EventService;
 import  com.ticketmaster.event.repository.EventRepository;
 import com.ticketmaster.event.mapper.EventMapper;
 import com.ticketmaster.event.service.VenueService;
+import io.micrometer.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -41,6 +42,7 @@ import org.springframework.stereotype.Service;
  * @see EventRepository
  * @see EventMapper
  */
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -88,19 +90,57 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public EventResponse updateEvent(Long eventId, EventUpdateRequest eventUpdateRequest) throws EventNotFoundException {
+    public EventResponse updateEvent(Long eventId, EventUpdateRequest updateRequest) throws EventNotFoundException {
 
         Event event = findEventById(eventId);
 
-        event.setAvailableSeats(eventUpdateRequest.availableSeats());
-        event.setName(event.getName());
-        event.setDescription(eventUpdateRequest.description());
-        event.setStartTime(event.getStartTime());
-        event.setEndTime(eventUpdateRequest.endTime());
+        mergeEventDetails(event, updateRequest);
 
         eventRepository.save(event);
 
         return mapToEventResponse(event);
+    }
+
+    private void mergeEventDetails(Event existingEvent, EventUpdateRequest updateRequest) {
+
+        // Update event name if provided
+        if (StringUtils.isNotBlank(updateRequest.name())) {
+            existingEvent.setName(updateRequest.name());
+        }
+
+        // Update event description if provided
+        if (StringUtils.isNotBlank(updateRequest.description())) {
+            existingEvent.setDescription(updateRequest.description());
+        }
+
+        // Update start time if provided
+        if (updateRequest.startTime() != null) {
+            existingEvent.setStartTime(updateRequest.startTime());
+        }
+
+        // Update end time if provided
+        if (updateRequest.endTime() != null) {
+            existingEvent.setEndTime(updateRequest.endTime());
+        }
+
+        // Update available seats if provided
+        if (updateRequest.availableSeats() != null) {
+            existingEvent.setAvailableSeats(updateRequest.availableSeats());
+        }
+
+        // Update venue if a valid venue ID is provided
+        if (updateRequest.venueId() != null) {
+//            Venue venue = venueService.getVenue(updateRequest.venueId());
+            Venue venue = new Venue();
+            existingEvent.setVenue(venue);
+        }
+
+        // Update category if a valid category ID is provided
+        if (updateRequest.categoryId() != null) {
+//            Category category = categoryService.getCategory(updateRequest.categoryId());
+            Category category = new Category();
+            existingEvent.setCategory(category);
+        }
     }
 
     @Override
