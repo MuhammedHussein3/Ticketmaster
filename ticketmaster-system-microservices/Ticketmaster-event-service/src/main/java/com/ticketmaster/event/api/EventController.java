@@ -3,8 +3,10 @@ package com.ticketmaster.event.api;
 import com.ticketmaster.event.dto.EventCreateRequest;
 import com.ticketmaster.event.dto.EventCreateResponse;
 import com.ticketmaster.event.dto.EventResponse;
+import com.ticketmaster.event.dto.EventUpdateRequest;
 import com.ticketmaster.event.service.EventService;
 import jakarta.validation.Valid;
+import jakarta.ws.rs.Path;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -33,6 +35,14 @@ public class EventController {
             @PathVariable("event-id") Long eventId
     ){
         return ResponseEntity.ok(eventService.getEvent(eventId));
+    }
+
+    @PutMapping("/event-id")
+    public ResponseEntity<EventResponse> updateEvent(
+            @PathVariable("event-id") Long eventId,
+            @Valid @RequestBody EventUpdateRequest eventUpdateRequest
+            ){
+        return ResponseEntity.ok(eventService.updateEvent(eventId, eventUpdateRequest));
     }
 
 }
