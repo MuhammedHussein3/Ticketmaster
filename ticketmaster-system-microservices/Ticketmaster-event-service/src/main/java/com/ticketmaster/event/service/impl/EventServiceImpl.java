@@ -100,6 +100,8 @@ public class EventServiceImpl implements EventService {
         event.setStartTime(event.getStartTime());
         event.setEndTime(eventUpdateRequest.endTime());
 
+        eventRepository.save(event);
+
         return EventResponse.builder()
                 .name(event.getName())
                 .description(event.getDescription())
@@ -113,6 +115,9 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public void deleteEvent(Long eventId) {
-        
+        Event event = eventRepository.findById(eventId).orElseThrow(
+                ()-> new EventNotFoundException(String.format("Event not found with ID:: %d", eventId))
+        );
+        eventRepository.delete(event);
     }
 }
