@@ -91,11 +91,28 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventResponse updateEvent(Long eventId, EventUpdateRequest eventUpdateRequest) throws EventNotFoundException {
-      return null;
+        Event event = eventRepository.findById(eventId).orElseThrow(
+                ()-> new EventNotFoundException(String.format("Event not found with ID:: %d", eventId))
+        );
+        event.setAvailableSeats(eventUpdateRequest.availableSeats());
+        event.setName(event.getName());
+        event.setDescription(eventUpdateRequest.description());
+        event.setStartTime(event.getStartTime());
+        event.setEndTime(eventUpdateRequest.endTime());
+
+        return EventResponse.builder()
+                .name(event.getName())
+                .description(event.getDescription())
+                .availableSeats(event.getAvailableSeats())
+                .startTime(event.getStartTime())
+                .endTime(event.getEndTime())
+                .category(event.getCategory())
+                .venue(event.getVenue())
+                .build();
     }
 
     @Override
     public void deleteEvent(Long eventId) {
-
+        
     }
 }
