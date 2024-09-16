@@ -117,5 +117,7 @@ public class EventServiceImpl implements EventService {
         );
     }
 
-    
+    private EventResponse mapToEventResponse(Event  event){
+        return eventMapper.mapToEventResponse(event);
+    }
 }
