@@ -54,8 +54,8 @@ public class EventServiceImpl implements EventService {
     @Override
     public EventCreateResponse createEvent(EventCreateRequest eventCreatedRequest) throws EventCreationException {
 
-        Category category = categoryService.getCategory();
-        Venue venue = venueService.getVenue();
+        Category category = new Category();
+        Venue venue = new Venue();
 
         Event event = mapToEvent(eventCreatedRequest);
 
@@ -74,9 +74,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventResponse getEvent(Long eventId) throws EventNotFoundException {
-        Event event = eventRepository.findById(eventId).orElseThrow(
-                ()-> new EventNotFoundException(String.format("Event not found with ID:: %d", eventId))
-        );
+        Event event = findEventById(eventId);
         return EventResponse.builder()
                 .name(event.getName())
                 .description(event.getDescription())
@@ -91,9 +89,9 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventResponse updateEvent(Long eventId, EventUpdateRequest eventUpdateRequest) throws EventNotFoundException {
-        Event event = eventRepository.findById(eventId).orElseThrow(
-                ()-> new EventNotFoundException(String.format("Event not found with ID:: %d", eventId))
-        );
+
+        Event event = findEventById(eventId);
+
         event.setAvailableSeats(eventUpdateRequest.availableSeats());
         event.setName(event.getName());
         event.setDescription(eventUpdateRequest.description());
@@ -102,15 +100,7 @@ public class EventServiceImpl implements EventService {
 
         eventRepository.save(event);
 
-        return EventResponse.builder()
-                .name(event.getName())
-                .description(event.getDescription())
-                .availableSeats(event.getAvailableSeats())
-                .startTime(event.getStartTime())
-                .endTime(event.getEndTime())
-                .category(event.getCategory())
-                .venue(event.getVenue())
-                .build();
+        return mapToEventResponse(event);
     }
 
     @Override
@@ -120,4 +110,12 @@ public class EventServiceImpl implements EventService {
         );
         eventRepository.delete(event);
     }
+
+    private Event findEventById(Long eventId){
+        return eventRepository.findById(eventId).orElseThrow(
+                ()-> new EventNotFoundException(String.format("Event not found with ID:: %d", eventId))
+        );
+    }
+
+    
 }
