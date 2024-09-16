@@ -8,6 +8,7 @@ import com.ticketmaster.event.dto.EventUpdateRequest;
 import com.ticketmaster.event.exceptions.EventNotFoundException;
 import com.ticketmaster.event.exceptions.EventCreationException;
 import com.ticketmaster.event.exceptions.InvalidEventUpdateException;
+import com.ticketmaster.event.exceptions.EventDeletionException;
 /**
  * Service interface for managing events.
  */
@@ -63,4 +64,18 @@ public interface EventService {
      */
 
     EventResponse updateEvent(Long eventId, EventUpdateRequest eventUpdateRequest) throws EventNotFoundException;
+
+    /**
+     * Deletes an existing event based on the provided event ID.
+     *
+     * This method removes the event with the specified {@code eventId} from the system.
+     * If the event exists, it will be permanently deleted. If no event is found with the given ID,
+     * the operation return Exception Error.
+     *
+     * @param eventId the unique identifier of the event to be deleted.
+     *                This ID must correspond to an existing event in the system.
+     * @throws EventNotFoundException if no event with the specified {@code eventId} is found.
+     * @throws EventDeletionException if an error occurs during the deletion process.
+     */
+    void deleteEvent(Long eventId);
 }
