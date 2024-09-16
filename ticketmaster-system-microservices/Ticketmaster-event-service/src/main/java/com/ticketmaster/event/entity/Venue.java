@@ -3,6 +3,8 @@ package com.ticketmaster.event.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Set;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -26,8 +28,9 @@ public class Venue {
     @Column(name = "location", nullable = false, length = 255)
     private String location;
 
-    @Column(name = "capacity")
+    @Column(name = "capacity", nullable = false)
     private Integer capacity;
 
-
+    @OneToMany(mappedBy = "venue")
+    private Set<Event> events;
 }
