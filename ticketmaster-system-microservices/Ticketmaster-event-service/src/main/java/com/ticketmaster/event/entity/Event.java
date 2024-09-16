@@ -47,4 +47,12 @@ public class Event {
     @LastModifiedDate
     @Column(name = "updated_at")
     private Instant updateAt;
+
+    @ManyToOne
+    @JoinColumn(name = "venue_id")
+    private Venue venue;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
 }
