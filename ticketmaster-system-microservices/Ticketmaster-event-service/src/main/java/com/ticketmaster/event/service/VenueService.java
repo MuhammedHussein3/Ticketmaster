@@ -37,4 +37,11 @@ public interface VenueService {
      * @return the response object containing the updated details of the venue
      */
     VenueResponse updateVenue(Integer id, VenueCreateRequest updateRequest);
+
+    /**
+     * Deletes a venue based on its ID.
+     *
+     * @param id the unique identifier of the venue to delete
+     */
+    void deleteVenue(Integer id);
 }
