@@ -29,4 +29,12 @@ public interface VenueService {
      */
     VenueResponse getVenueById(Integer id);
 
+    /**
+     * Updates an existing venue with new details.
+     *
+     * @param id the unique identifier of the venue to update
+     * @param updateRequest the request object containing the updated details of the venue
+     * @return the response object containing the updated details of the venue
+     */
+    VenueResponse updateVenue(Integer id, VenueCreateRequest updateRequest);
 }
