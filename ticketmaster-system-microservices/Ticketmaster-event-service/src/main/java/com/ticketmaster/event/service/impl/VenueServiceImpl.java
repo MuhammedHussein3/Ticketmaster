@@ -58,5 +58,35 @@ public class VenueServiceImpl implements VenueService {
         return mapToResponse(updatedVenue);
     }
 
+    private void mergeVenueDetails(Venue venue, VenueCreateRequest updateRequest) {
 
+        if (StringUtils.isNotBlank(updateRequest.name())){
+            venue.setName(updateRequest.name());
+        }
+
+        if (StringUtils.isNotBlank(updateRequest.description())){
+            venue.setDescription(updateRequest.description());
+        }
+
+        if (StringUtils.isNotBlank(updateRequest.location())){
+            venue.setLocation(updateRequest.location());
+        }
+
+        if (updateRequest.totalSeats() != null){
+            venue.setCapacity(updateRequest.totalSeats());
+        }
+    }
+
+    @Override
+    public void deleteVenue(Integer id) {
+
+        Venue venue = findVenue(id);
+
+        venueRepository.delete(venue);
+    }
+
+    private Venue findVenue(Integer id){
+        return venueRepository.findById(id)
+                .orElseThrow(()-> new VenueNotFoundException(String.format("Venue not found with ID:: %d", id)));
+    }
 }
