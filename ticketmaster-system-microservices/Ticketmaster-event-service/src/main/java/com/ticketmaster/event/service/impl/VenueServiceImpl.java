@@ -38,4 +38,25 @@ public class VenueServiceImpl implements VenueService {
         return venueMapper.mapToResponse(savedVenue);
     }
 
+    @Override
+    public VenueResponse getVenueById(Integer id) {
+
+        Venue venue =  findVenue(id);
+
+        return mapToResponse(venue);
+    }
+
+    @Override
+    public VenueResponse updateVenue(Integer id, VenueCreateRequest updateRequest) {
+
+        Venue venue = findVenue(id);
+
+        mergeVenueDetails(venue, updateRequest);
+
+        Venue updatedVenue = venueRepository.save(venue);
+
+        return mapToResponse(updatedVenue);
+    }
+
+
 }
