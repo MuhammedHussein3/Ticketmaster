@@ -1,6 +1,7 @@
 package com.ticketmaster.event.service;
 
 import com.ticketmaster.event.dto.VenueCreateRequest;
+import com.ticketmaster.event.dto.VenueResponse;
 import com.ticketmaster.event.entity.Venue;
 
 /**
@@ -18,5 +19,14 @@ public interface VenueService {
      * @return the response object containing details of the created venue, including the venue's ID
      *and other information such as location.
      */
-    Venue createVenue(VenueCreateRequest createRequest);
+    VenueResponse createVenue(VenueCreateRequest createRequest);
+
+    /**
+     * Retrieves the details of a venue by its ID.
+     *
+     * @param id the unique identifier of the venue
+     * @return the response object containing details of the requested venue
+     */
+    VenueResponse getVenueById(Integer id);
+
 }
