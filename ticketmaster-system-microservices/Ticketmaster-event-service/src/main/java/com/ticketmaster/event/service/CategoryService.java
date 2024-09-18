@@ -16,5 +16,13 @@ public interface CategoryService {
          */
         Category createCategory(CategoryRequest categoryRequest);
 
+        /**
+         * Retrieves a category by its ID.
+         *
+         * @param categoryId The ID of the category.
+         * @return The category with the specified ID.
+         */
+        Category getCategoryById(Long categoryId);
 
+    
 }
