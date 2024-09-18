@@ -17,13 +17,14 @@ import com.ticketmaster.event.service.VenueService;
 import io.micrometer.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -58,7 +59,10 @@ public class EventServiceImpl implements EventService {
     private final VenueService venueService;
     private final EventMapper eventMapper;
 
-
+    @CacheEvict(
+            value = "getEventCache",
+            key = "#getEventCache"
+    )
     @Transactional
     @Override
     public EventCreateResponse createEvent(EventCreateRequest eventCreatedRequest) throws EventCreationException {
@@ -81,10 +85,17 @@ public class EventServiceImpl implements EventService {
         return eventMapper.mapToEventCreateResponse(createEvent);
     }
 
+    @Cacheable(
+            value = "getEventCache",
+            key = "#eventId",
+            unless = "#result == null"
+    )
     @Transactional(
             propagation = Propagation.REQUIRED,
             isolation = Isolation.READ_COMMITTED,
-            rollbackFor = {EventNotFoundException.class}
+            rollbackFor = {
+                    EventNotFoundException.class
+            }
     )
     @Async
     @Override
@@ -96,9 +107,12 @@ public class EventServiceImpl implements EventService {
     }
 
 
+    @CacheEvict(value = "getEventCache", key = "#eventId")
     @Transactional(
             isolation = Isolation.REPEATABLE_READ,
-            rollbackFor = {EventNotFoundException.class}
+            rollbackFor = {
+                    EventNotFoundException.class
+            }
     )
     @Override
     public EventResponse updateEvent(Long eventId, EventUpdateRequest updateRequest) throws EventNotFoundException {
@@ -155,6 +169,10 @@ public class EventServiceImpl implements EventService {
         }
     }
 
+    @CacheEvict(
+            value = "getEventCache",
+            key = "#eventId"
+    )
     @Transactional(
             isolation = Isolation.SERIALIZABLE,
             rollbackFor = {EventNotFoundException.class}
