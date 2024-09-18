@@ -6,7 +6,8 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.scheduling.annotation.EnableAsync;
 
 @SpringBootApplication
-
+@EnableAsync
+@EnableCaching
 public class SearchServiceApplication {
 
 	public static void main(String[] args) {
