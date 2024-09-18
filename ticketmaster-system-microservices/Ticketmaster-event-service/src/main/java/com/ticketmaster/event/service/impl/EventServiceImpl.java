@@ -17,7 +17,14 @@ import com.ticketmaster.event.service.VenueService;
 import io.micrometer.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.concurrent.Callable;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Implementation of the {@link EventService} interface.
@@ -51,6 +58,8 @@ public class EventServiceImpl implements EventService {
     private final VenueService venueService;
     private final EventMapper eventMapper;
 
+
+    @Transactional
     @Override
     public EventCreateResponse createEvent(EventCreateRequest eventCreatedRequest) throws EventCreationException {
 
@@ -72,14 +81,25 @@ public class EventServiceImpl implements EventService {
         return eventMapper.mapToEventCreateResponse(createEvent);
     }
 
+    @Transactional(
+            propagation = Propagation.REQUIRED,
+            isolation = Isolation.READ_COMMITTED,
+            rollbackFor = {EventNotFoundException.class}
+    )
+    @Async
     @Override
-    public EventResponse getEvent(Long eventId) throws EventNotFoundException {
+    public CompletableFuture<EventResponse> getEvent(Long eventId) throws EventNotFoundException {
 
         Event event = findEventById(eventId);
 
-        return mapToEventResponse(event);
+        return CompletableFuture.completedFuture(mapToEventResponse(event));
     }
 
+
+    @Transactional(
+            isolation = Isolation.REPEATABLE_READ,
+            rollbackFor = {EventNotFoundException.class}
+    )
     @Override
     public EventResponse updateEvent(Long eventId, EventUpdateRequest updateRequest) throws EventNotFoundException {
 
@@ -92,6 +112,7 @@ public class EventServiceImpl implements EventService {
         return mapToEventResponse(event);
     }
 
+    @Transactional(propagation = Propagation.SUPPORTS)
     private void mergeEventDetails(Event existingEvent, EventUpdateRequest updateRequest) {
 
         // Update event name if provided
@@ -134,6 +155,10 @@ public class EventServiceImpl implements EventService {
         }
     }
 
+    @Transactional(
+            isolation = Isolation.SERIALIZABLE,
+            rollbackFor = {EventNotFoundException.class}
+    )
     @Override
     public void deleteEvent(Long eventId) {
         Event event = eventRepository.findById(eventId).orElseThrow(
@@ -142,6 +167,9 @@ public class EventServiceImpl implements EventService {
         eventRepository.delete(event);
     }
 
+    @Transactional(
+            propagation = Propagation.SUPPORTS
+    )
     private Event findEventById(Long eventId){
         return eventRepository.findById(eventId).orElseThrow(
                 ()-> new EventNotFoundException(String.format("Event not found with ID:: %d", eventId))
