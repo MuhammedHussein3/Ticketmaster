@@ -23,7 +23,7 @@ public interface CategoryService {
          * @param categoryId The ID of the category.
          * @return The category with the specified ID.
          */
-        Category getCategoryById(Long categoryId);
+        Category getCategoryById(Integer categoryId);
 
         /**
          * Updates an existing category.
@@ -32,14 +32,14 @@ public interface CategoryService {
          * @param categoryRequest The new category data.
          * @return The updated category.
          */
-        Category updateCategory(Long categoryId, CategoryRequest categoryRequest);
+        Category updateCategory(Integer categoryId, CategoryRequest categoryRequest);
 
         /**
          * Deletes a category by its ID.
          *
          * @param categoryId The ID of the category to delete.
          */
-        void deleteCategory(Long categoryId);
+        void deleteCategory(Integer categoryId);
 
         /**
          * Retrieves all categories.
