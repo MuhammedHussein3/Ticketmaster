@@ -59,9 +59,11 @@ public class EventServiceImpl implements EventService {
     private final VenueService venueService;
     private final EventMapper eventMapper;
 
+
+
     @CacheEvict(
             value = "getEventCache",
-            key = "#getEventCache"
+            allEntries = true
     )
     @Transactional
     @Override
@@ -107,7 +109,11 @@ public class EventServiceImpl implements EventService {
     }
 
 
-    @CacheEvict(value = "getEventCache", key = "#eventId")
+
+    @CacheEvict(
+            value = "getEventCache",
+            allEntries = true
+    )
     @Transactional(
             isolation = Isolation.REPEATABLE_READ,
             rollbackFor = {
@@ -126,52 +132,56 @@ public class EventServiceImpl implements EventService {
         return mapToEventResponse(event);
     }
 
+
+
     @Transactional(propagation = Propagation.SUPPORTS)
     private void mergeEventDetails(Event existingEvent, EventUpdateRequest updateRequest) {
 
         // Update event name if provided
-        if (StringUtils.isNotBlank(updateRequest.name())) {
-            existingEvent.setName(updateRequest.name());
+        if (StringUtils.isNotBlank(updateRequest.getName())) {
+            existingEvent.setName(updateRequest.getName());
         }
 
         // Update event description if provided
-        if (StringUtils.isNotBlank(updateRequest.description())) {
-            existingEvent.setDescription(updateRequest.description());
+        if (StringUtils.isNotBlank(updateRequest.getDescription())) {
+            existingEvent.setDescription(updateRequest.getDescription());
         }
 
         // Update start time if provided
-        if (updateRequest.startTime() != null) {
-            existingEvent.setStartTime(updateRequest.startTime());
+        if (updateRequest.getStartTime() != null) {
+            existingEvent.setStartTime(updateRequest.getStartTime());
         }
 
         // Update end time if provided
-        if (updateRequest.endTime() != null) {
-            existingEvent.setEndTime(updateRequest.endTime());
+        if (updateRequest.getEndTime() != null) {
+            existingEvent.setEndTime(updateRequest.getEndTime());
         }
 
         // Update available seats if provided
-        if (updateRequest.availableSeats() != null) {
-            existingEvent.setAvailableSeats(updateRequest.availableSeats());
+        if (updateRequest.getAvailableSeats() != null) {
+            existingEvent.setAvailableSeats(updateRequest.getAvailableSeats());
         }
 
         // Update venue if a valid venue ID is provided
-        if (updateRequest.venueId() != null) {
+        if (updateRequest.getVenueId() != null) {
 //            Venue venue = venueService.getVenue(updateRequest.venueId());
             Venue venue = new Venue();
             existingEvent.setVenue(venue);
         }
 
         // Update category if a valid category ID is provided
-        if (updateRequest.categoryId() != null) {
+        if (updateRequest.getCategoryId() != null) {
 //            Category category = categoryService.getCategory(updateRequest.categoryId());
             Category category = new Category();
             existingEvent.setCategory(category);
         }
     }
 
+
+
     @CacheEvict(
             value = "getEventCache",
-            key = "#eventId"
+            allEntries = true
     )
     @Transactional(
             isolation = Isolation.SERIALIZABLE,
@@ -185,6 +195,8 @@ public class EventServiceImpl implements EventService {
         eventRepository.delete(event);
     }
 
+
+
     @Transactional(
             propagation = Propagation.SUPPORTS
     )
@@ -193,6 +205,7 @@ public class EventServiceImpl implements EventService {
                 ()-> new EventNotFoundException(String.format("Event not found with ID:: %d", eventId))
         );
     }
+
 
     private EventResponse mapToEventResponse(Event  event){
         return eventMapper.mapToEventResponse(event);
