@@ -31,4 +31,8 @@ eureka:
     fetch-registry: true
 
 server:
+  tomcat:
+    threads:
+      max=10:
+
   port: 9922
