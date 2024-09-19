@@ -1,6 +1,7 @@
 package com.ticketmaster.search.service;
 
-import com.ticketmaster.search.dto.EventCreateRequest;
+
+import com.ticketmaster.search.dto.SearchEvent;
 import com.ticketmaster.search.exceptions.EventCreationException;
 /**
  * Service interface for managing search-related operations.
@@ -16,5 +17,5 @@ public interface SearchService {
      *                           available seats, venue, and category.
      * @throws EventCreationException if the event creation process encounters any issues.
      */
-    void createEvent(EventCreateRequest eventCreateRequest);
+    void createEvent(SearchEvent eventCreateRequest);
 }
