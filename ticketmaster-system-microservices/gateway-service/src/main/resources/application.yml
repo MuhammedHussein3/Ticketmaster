@@ -1,0 +1,77 @@
+spring:
+  redis:
+    host: localhost
+    port: 6379
+  application:
+   name: ticketmaster-gateway-service
+  cloud:
+    gateway:
+      routes:
+        - id: event-service
+          uri: http://localhost:9922
+          predicates:
+            - Path=/api/v1/events/**
+          filters:
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 10
+                redis-rate-limiter.bursCapacity: 20
+                redis-rate-limiter.requestedTokens: 1
+        - id: event-service
+          uri: http://localhost:9922
+          predicates:
+            - Path=/api/v1/venues/**
+          filters:
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 10
+                redis-rate-limiter.bursCapacity: 20
+                redis-rate-limiter.requestedTokens: 1
+        - id: event-service
+          uri: http://localhost:9922
+          predicates:
+            - Path=/api/v1/categories/**
+          filters:
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 10
+                redis-rate-limiter.bursCapacity: 20
+                redis-rate-limiter.requestedTokens: 1
+        - id: booking-service
+          uri: http://localhost:6633
+          predicates:
+            - Path=/api/v1/bookings/**
+          filters:
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 10
+                redis-rate-limiter.bursCapacity: 20
+                redis-rate-limiter.requestedTokens: 1
+        - id: ticket-service
+          uri: http://localhost:5577
+          predicates:
+            - Path=/api/v1/tickets/**
+          filters:
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 10
+                redis-rate-limiter.bursCapacity: 20
+                redis-rate-limiter.requestedTokens: 1
+        - id: search-service
+          uri: http://localhost:8822
+          predicates:
+            - Path=/api/v1/search/**
+          filters:
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 10
+                redis-rate-limiter.bursCapacity: 20
+                redis-rate-limiter.requestedTokens: 1
+eureka:
+  client:
+   serviceUrl.defaultZone: http://localhost:8761/eureka/
+   register-with-eureka: true
+   fetch-registry: true
+server:
+  port: 7777
+

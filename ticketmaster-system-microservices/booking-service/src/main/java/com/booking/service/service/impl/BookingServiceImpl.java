@@ -1,5 +1,6 @@
 package com.booking.service.service.impl;
 
+import com.booking.service.User.User;
 import com.booking.service.dto.enums.BookingStatus;
 import com.booking.service.dto.request.ReserveRequest;
 import com.booking.service.dto.response.ReserveResponse;
@@ -148,7 +149,8 @@ public class BookingServiceImpl implements BookingService {
         bookingProducer.sendBookingConfirmation(bookingConfirmationMessage);
 
         Map<Long, String> ticketSeatMap = mapTicketIdToSeat(availableTickets);
-        TicketDetailsMessage ticketDetailsMessage = convertToTicketDetails(ticketSeatMap, event, booking);
+        Map<Long, User> userTicketInfoMap = mapTicketIdToUser(availableTickets);
+        TicketDetailsMessage ticketDetailsMessage = convertToTicketDetails(ticketSeatMap, event, booking, userTicketInfoMap);
         ticketProducer.sendTicketDetails(ticketDetailsMessage);
 
         log.info("Successfully sent ticket notifications.");
@@ -205,8 +207,27 @@ public class BookingServiceImpl implements BookingService {
         return bookingMapper.convertToBookingConfirmationMessage(event, booking);
     }
 
-    private TicketDetailsMessage convertToTicketDetails(Map<Long, String> ticketSeatMap, Event event, Booking booking) {
-        return bookingMapper.convertToTicketDetailsMessage(ticketSeatMap, event, booking);
+    private TicketDetailsMessage convertToTicketDetails(Map<Long, String> ticketSeatMap, Event event, Booking booking, Map<Long, User> ticketUsersMap) {
+
+        // fetch user from user service using userId
+
+        return bookingMapper.convertToTicketDetailsMessage(ticketSeatMap, event, booking, ticketUsersMap);
+    }
+
+
+    private Map<Long, User> mapTicketIdToUser(List<Ticket> availableTickets) {
+
+        Map<Long, User> userTicketInfoMap = new HashMap<>();
+
+        User user = User.builder()
+                .firsName("Muhammad")
+                .lastName("Hussein")
+                .age(22)
+                .build();
+        for (Ticket ticket : availableTickets){
+            userTicketInfoMap.put(ticket.getId(), user);
+        }
+        return userTicketInfoMap;
     }
 
     private Event getEvent(Long eventId) throws ExecutionException, InterruptedException {

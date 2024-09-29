@@ -1,0 +1,113 @@
+spring:
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5555/booking
+    username: postgres
+    password: postgres
+    hikari:
+      max-lifetime=1800000:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+      eclipselink:
+        logging:
+          level:
+            org:
+              hibernate:
+                SQL: debug
+                type:
+                  descriptor: trace
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    database: postgresql
+
+  spring:
+    redis:
+      host: localhost  # Redis host
+      port: 6379       # Redis port  # Optional, only if you're using Redis authentication
+      timeout: 6000    # Redis connection timeout
+  # Kafka
+  kafka:
+    producer:
+      bootstrap-servers: localhost:29092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.type.mapping: bookingConfirmationMessage:com.booking.service.message.BookingConfirmationMessage,ticketDetailsMessage:com.booking.service.message.TicketDetailsMessage
+
+  redisson:
+    config: |          # Redisson configuration in YAML format
+      singleServerConfig:
+        address: "redis://localhost:6379"   # Redis connection URL
+        connectionPoolSize: 64              # Connection pool size
+        connectionMinimumIdleSize: 24       # Minimum idle connections
+        idleConnectionTimeout: 10000        # Idle connection timeout
+        connectTimeout: 30000               # Redis connect timeout
+        timeout: 3000                       # Redis response timeout
+        retryAttempts: 3                    # Number of retries for failed lock attempts
+        retryInterval: 1500
+
+  application:
+   name: booking-service
+
+paypal:
+  client-id: AdsTDu7dGrXva-ZOkoCIf6QflgrA-gWXxwnByD-yTK1z60BIqBzMAnTJ7FbvI-Jrfp-rwsEGS2kAwtuo
+  client-secret: EJ5c18wyzFONHwtjZYDbi4kGy1G-IxXa6C3xZxM4HhMKNeSt_ZZOlOuddTLzwqKskYOf3yWsOLeKrY2p
+  mode: sandbox
+
+server:
+  port: 6633
+
+application:
+  config:
+    ticket-service-url-feignClient: http://localhost:5577/api/v1/tickets
+    event-service-url-feignClient: http://localhost:9922/api/v1/events
+    #ticket-service-url-restTemplate:
+management:
+  health:
+    show-details: always
+    circuitbreakers:
+      enabled: true
+
+  endpoint:
+    health:
+      show-details: always
+
+  endpoints:
+    web:
+      exposure:
+        include: health
+
+# Resilience4J
+resilience4j:
+  circuitbreaker:
+    instances:
+      getAvailableSeats:
+        registerHealthIndicator: true
+        eventConsumerBufferSize: 10
+        failureRateThreshold: 50
+        minimumNumberOfCalls: 5
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        waitDurationInOpenState: 3s
+        permittedNumberOfCallsInHalfOpenState: 2
+        slidingWindowSize: 10
+        slidingWindowType: COUNT_BASED
+
+        max-attempts: 5
+        wait-duration: 2s
+
+  ratelimiter:
+    instances:
+      companyBreaker:
+        timeout-duration: 0
+        limit-refresh-period: 4
+        limit-for-period: 2
+eureka:
+  client:
+    serviceUrl.defaultZone: http://localhost:8761/eureka
+    register-with-register: true
+    fetch-registry: true

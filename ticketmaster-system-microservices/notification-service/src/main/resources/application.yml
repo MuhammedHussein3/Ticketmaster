@@ -1,0 +1,32 @@
+spring:
+  application:
+   name: notification-service
+  # Mail
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: muhammadhussein2312@gmail.com
+    password: fpxq ecrz tzfo gxhm
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:29092
+      group-id: notification_id
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: '*'
+        spring.json.type.mapping: bookingConfirmationMessage:com.notification.service.dto.BookingConfirmationMessage,ticketDetailsMessage:com.notification.service.dto.TicketDetailsMessage
+eureka:
+  client:
+    serviceUrl.defaultZone: http://localhost:8761/eureka
+    register-with-register: true
+    fetch-registry: true
+server:
+  port: 1122

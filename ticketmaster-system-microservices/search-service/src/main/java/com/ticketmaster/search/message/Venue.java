@@ -13,20 +13,15 @@ import java.util.Set;
 
 public class Venue {
 
-
     private Integer id;
-
 
     private String name;
 
-
     private String description;
-
 
     private String location;
 
     private Integer capacity;
-
 
     private Set<Event> events;
 }

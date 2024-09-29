@@ -2,6 +2,14 @@
 <project version="4">
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/ticketmaster-system-microservices/Ticketmaster-event-service/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/ticketmaster-system-microservices/Ticketmaster-registry-server/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ticketmaster-system-microservices/booking-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ticketmaster-system-microservices/event-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ticketmaster-system-microservices/gateway-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ticketmaster-system-microservices/notification-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ticketmaster-system-microservices/payment-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ticketmaster-system-microservices/registry-server/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ticketmaster-system-microservices/search-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ticketmaster-system-microservices/ticket-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ticketmaster-system-microservices/ticketmaster-gateway-service/src/main/java" charset="UTF-8" />
   </component>
 </project>

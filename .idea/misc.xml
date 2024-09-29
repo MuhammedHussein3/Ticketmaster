@@ -6,6 +6,15 @@
       <list>
         <option value="$PROJECT_DIR$/ticketmaster-system-microservices/Ticketmaster-registry-server/pom.xml" />
         <option value="$PROJECT_DIR$/ticketmaster-system-microservices/Ticketmaster-event-service/pom.xml" />
+        <option value="$PROJECT_DIR$/ticketmaster-system-microservices/ticketmaster-gateway-service/pom.xml" />
+        <option value="$PROJECT_DIR$/ticketmaster-system-microservices/search-service/pom.xml" />
+        <option value="$PROJECT_DIR$/ticketmaster-system-microservices/booking-service/pom.xml" />
+        <option value="$PROJECT_DIR$/ticketmaster-system-microservices/ticket-service/pom.xml" />
+        <option value="$PROJECT_DIR$/ticketmaster-system-microservices/event-service/pom.xml" />
+        <option value="$PROJECT_DIR$/ticketmaster-system-microservices/gateway-service/pom.xml" />
+        <option value="$PROJECT_DIR$/ticketmaster-system-microservices/payment-service/pom.xml" />
+        <option value="$PROJECT_DIR$/ticketmaster-system-microservices/notification-service/pom.xml" />
+        <option value="$PROJECT_DIR$/ticketmaster-system-microservices/registry-server/pom.xml" />
       </list>
     </option>
   </component>

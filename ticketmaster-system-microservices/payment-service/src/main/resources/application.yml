@@ -1,0 +1,17 @@
+spring:
+  application:
+   name: payment-service
+
+paypal:
+  client-id: AdsTDu7dGrXva-ZOkoCIf6QflgrA-gWXxwnByD-yTK1z60BIqBzMAnTJ7FbvI-Jrfp-rwsEGS2kAwtuo
+  client-secret: EJ5c18wyzFONHwtjZYDbi4kGy1G-IxXa6C3xZxM4HhMKNeSt_ZZOlOuddTLzwqKskYOf3yWsOLeKrY2p
+  mode: sandbox
+
+server:
+  port: 2244
+
+eureka:
+  client:
+    serviceUrl.defaultZone: http://localhost:8761/eureka
+    register-with-register: true
+    fetch-registry: true

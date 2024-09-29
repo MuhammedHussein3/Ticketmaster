@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: search-service
+
+  elasticsearch:
+    rest:
+      uris: http://localhost:9200
+      username: elastic
+      password: 1234
+    connection-timeout: 1000
+    socket-timeout: 30000
+  logging:
+    level:
+      # Set logging for the Elasticsearch client
+      org.elasticsearch.client: DEBUG
+      # Optionally, also set logging for the Spring Data Elasticsearch classes
+      org.springframework.data.elasticsearch.core: DEBUG
+
+application:
+  config:
+    venue-url-feignClient: http://localhost:9922/api/v1/venues
+    category-url-feignClient: http://localhost:9922/api/v1/categories
+eureka:
+  client:
+    serviceUrl.defaultZone: http://localhost:8761/eureka
+    register-with-register: true
+    fetch-registry: true
+
+server:
+  port: 8822

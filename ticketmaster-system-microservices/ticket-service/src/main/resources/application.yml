@@ -1,0 +1,91 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5555/ticket
+    username: postgres
+    password: postgres
+    hikari:
+      max-lifetime=1800000:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+      eclipselink:
+        logging:
+          level:
+            org:
+              hibernate:
+                SQL: debug
+                type:
+                  descriptor: trace
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    database: postgresql
+
+  application:
+    name: ticket-service
+management:
+  health:
+    show-details: always
+    circuitbreakers:
+      enabled: true
+
+  endpoint:
+    health:
+      show-details: always
+
+  endpoints:
+    web:
+      exposure:
+        include: health
+  cache:
+    type: redis
+  redis:
+    host: localhost
+    port: 6379
+    timeout: 6000
+# Resilience4J
+resilience4j:
+  circuitbreaker:
+    instances:
+      getAvailableSeats:
+        registerHealthIndicator: true
+        eventConsumerBufferSize: 10
+        failureRateThreshold: 50
+        minimumNumberOfCalls: 5
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        waitDurationInOpenState: 3s
+        permittedNumberOfCallsInHalfOpenState: 2
+        slidingWindowSize: 10
+        slidingWindowType: COUNT_BASED
+
+        max-attempts: 5
+        wait-duration: 2s
+
+  ratelimiter:
+    instances:
+      companyBreaker:
+        timeout-duration: 0
+        limit-refresh-period: 4
+        limit-for-period: 2
+
+  #cache:
+  #  type: redis
+    # redis:
+    # host: localhost
+    #  port: 6379
+  #  timeout: 6000
+
+eureka:
+  client:
+    serviceUrl.defaultZone: http://localhost:8761/eureka
+    register-with-register: true
+    fetch-registry: true
+
+server:
+  tomcat:
+    threads:
+      max=10:
+  port: 5577
