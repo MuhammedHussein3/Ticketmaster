@@ -165,5 +165,18 @@ class EventServiceImplTest {
         verify(eventRepository, never()).save(any())
     }
 
+    @Test
+    fun `test update event category not found`() {
+        whenever(eventRepository.findById(EVENT_ID)).thenReturn(Optional.of(existingEvent))
+        whenever(venueRepository.findById(VENUE_ID)).thenReturn(Optional.of(Venue()))
+        whenever(categoryService.getCategoryById(CATEGORY_ID)).thenThrow(CategoryNotFoundException("Category not found"))
+
+        assertThrows<CategoryNotFoundException> {
+            eventServiceImpl.updateEvent(EVENT_ID, updateRequest)
+        }
+
+        verify(eventRepository, never()).save(any())
+    }
+
 
 }
