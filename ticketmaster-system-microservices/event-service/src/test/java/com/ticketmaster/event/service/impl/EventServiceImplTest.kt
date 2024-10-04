@@ -153,5 +153,17 @@ class EventServiceImplTest {
         verify(eventRepository, times(1)).save(existingEvent)
     }
 
+    @Test
+    fun `test update event venue not found`() {
+        whenever(eventRepository.findById(EVENT_ID)).thenReturn(Optional.of(existingEvent))
+        whenever(venueRepository.findById(VENUE_ID)).thenReturn(Optional.empty())
+
+        assertThrows<VenueNotFoundException> {
+            eventServiceImpl.updateEvent(EVENT_ID, updateRequest)
+        }
+
+        verify(eventRepository, never()).save(any())
+    }
+
 
 }
