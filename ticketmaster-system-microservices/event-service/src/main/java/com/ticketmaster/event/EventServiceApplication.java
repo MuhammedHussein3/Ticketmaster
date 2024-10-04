@@ -14,10 +14,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 @EnableCaching
 @EnableFeignClients
-public class TicketmasterEventServiceApplication {
+public class EventServiceApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(TicketmasterEventServiceApplication.class, args);
+		SpringApplication.run(EventServiceApplication.class, args);
 	}
 
 }

@@ -11,6 +11,7 @@ import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.CannotCreateTransactionException;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -83,8 +84,8 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = {NotFoundException.class})
-    private final Category findCategory(Integer categoryId){
+    private Category findCategory(Integer categoryId){
         return categoryRepository.findById(categoryId)
-                .orElseThrow(()-> new NotFoundException(String.format("Category not found with ID:: %d", categoryId)));
+                .orElseThrow(()-> new CannotCreateTransactionException(String.format("Category not found with ID:: %d", categoryId)));
     }
 }
