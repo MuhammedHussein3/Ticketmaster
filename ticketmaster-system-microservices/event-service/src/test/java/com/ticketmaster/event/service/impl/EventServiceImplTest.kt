@@ -178,5 +178,15 @@ class EventServiceImplTest {
         verify(eventRepository, never()).save(any())
     }
 
+    @Test
+    fun `test delete event success`() {
+        val event = Event()
+        whenever(eventRepository.findById(EVENT_ID)).thenReturn(Optional.of(event))
+
+        eventServiceImpl.deleteEvent(EVENT_ID)
+
+        verify(eventRepository, times(1)).delete(event)
+    }
+
 
 }
