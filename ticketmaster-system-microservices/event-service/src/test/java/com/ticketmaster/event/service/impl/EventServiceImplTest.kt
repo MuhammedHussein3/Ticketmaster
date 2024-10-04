@@ -128,5 +128,30 @@ class EventServiceImplTest {
         verify(eventRepository, times(1)).findById(1L)
     }
 
+    @Test
+    fun `test update event success`() {
+        val venue = Venue().apply {
+            id = VENUE_ID
+        }
+
+        val category = Category().apply {
+            id = CATEGORY_ID
+        }
+
+        whenever(eventRepository.findById(EVENT_ID)).thenReturn(Optional.of(existingEvent))
+        whenever(venueRepository.findById(VENUE_ID)).thenReturn(Optional.of(venue))
+        whenever(categoryService.getCategoryById(CATEGORY_ID)).thenReturn(category)
+        whenever(eventRepository.save(existingEvent)).thenReturn(existingEvent)
+
+        val updatedEvent = eventServiceImpl.updateEvent(EVENT_ID, updateRequest)
+
+        assertNotNull(updatedEvent, "Updated event should not be null")
+        assertEquals("New Event Name", updatedEvent.name, "Event name should be updated")
+        assertEquals(venue, updatedEvent.venue, "Venue should be updated")
+        assertEquals(category, updatedEvent.category, "Category should be updated")
+
+        verify(eventRepository, times(1)).save(existingEvent)
+    }
+
 
 }
