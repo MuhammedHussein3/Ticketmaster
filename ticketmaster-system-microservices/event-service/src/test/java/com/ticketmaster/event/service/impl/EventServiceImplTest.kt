@@ -106,4 +106,15 @@ class EventServiceImplTest {
         }
     }
 
+    @Test
+    fun `test get event success`() {
+        val event = Event()
+        whenever(eventRepository.findById(EVENT_ID)).thenReturn(Optional.of(event))
+
+        val result = eventServiceImpl.getEvent(EVENT_ID).get()
+
+        assertNotNull(result, "Event should be found and not null")
+        verify(eventRepository, times(1)).findById(EVENT_ID)
+    }
+
 }
