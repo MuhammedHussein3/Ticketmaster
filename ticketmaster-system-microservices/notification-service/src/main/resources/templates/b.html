@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sequence Diagram - Ticket Booking System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #333;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #e0e0e0;
+        }
+        .action {
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Sequence Diagram - Ticket Booking System</h1>
+
+<table>
+    <thead>
+    <tr>
+        <th>Step</th>
+        <th>User</th>
+        <th>API Gateway</th>
+        <th>Service</th>
+        <th>Database</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>1</td>
+        <td>Initiates search for events</td>
+        <td>Receives search request</td>
+        <td>Processes search</td>
+        <td>Fetches event data</td>
+        <td>User searches for events</td>
+    </tr>
+    <tr>
+        <td>2</td>
+        <td>Requests event details</td>
+        <td>Receives request for event details</td>
+        <td>Retrieves event details</td>
+        <td>Fetches event info</td>
+        <td>User views event details</td>
+    </tr>
+    <tr>
+        <td>3</td>
+        <td>Books tickets for an event</td>
+        <td>Receives booking request</td>
+        <td>Processes ticket booking</td>
+        <td>Checks seat availability</td>
+        <td>User books tickets</td>
+    </tr>
+    <tr>
+        <td>4</td>
+        <td>Confirms booking</td>
+        <td>Receives confirmation request</td>
+        <td>Finalizes booking</td>
+        <td>Updates ticket status</td>
+        <td>User confirms booking</td>
+    </tr>
+    <tr>
+        <td>5</td>
+        <td>-</td>
+        <td>-</td>
+        <td>Triggers notification</td>
+        <td>-</td>
+        <td>Send confirmation email with ticket details</td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

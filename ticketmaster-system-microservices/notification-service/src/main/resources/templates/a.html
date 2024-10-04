@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sequence Diagram - Ticket Booking System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        .diagram {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .component {
+            border: 1px solid #333;
+            border-radius: 5px;
+            padding: 10px;
+            background-color: #fff;
+            width: 180px;
+            text-align: center;
+            margin: 5px;
+        }
+        .arrow {
+            margin: 10px 0;
+            position: relative;
+            height: 50px;
+        }
+        .arrow:before {
+            content: "";
+            position: absolute;
+            border: 1px solid #333;
+            border-left: none;
+            height: 20px;
+            width: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 0;
+        }
+        .arrow:after {
+            content: "→";
+            position: absolute;
+            top: 10px;
+            left: 35px;
+            font-size: 20px;
+        }
+        .sequence {
+            display: flex;
+            align-items: flex-start;
+        }
+        .step {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Sequence Diagram - Ticket Booking System</h1>
+
+<div class="diagram">
+    <div class="step">
+        <h2>User Searches for Events</h2>
+        <div class="sequence">
+            <div class="component">User</div>
+            <div class="arrow"></div>
+            <div class="component">API Gateway</div>
+            <div class="arrow"></div>
+            <div class="component">Search Service</div>
+            <div class="arrow"></div>
+            <div class="component">Cache</div>
+            <div class="arrow"></div>
+            <div class="component">Database</div>
+        </div>
+    </div>
+
+    <div class="step">
+        <h2>User Views Event Details</h2>
+        <div class="sequence">
+            <div class="component">User</div>
+            <div class="arrow"></div>
+            <div class="component">API Gateway</div>
+            <div class="arrow"></div>
+            <div class="component">Event Service</div>
+            <div class="arrow"></div>
+            <div class="component">Database</div>
+        </div>
+    </div>
+
+    <div class="step">
+        <h2>User Books Tickets</h2>
+        <div class="sequence">
+            <div class="component">User</div>
+            <div class="arrow"></div>
+            <div class="component">API Gateway</div>
+            <div class="arrow"></div>
+            <div class="component">Ticket Service</div>
+            <div class="arrow"></div>
+            <div class="component">Database</div>
+        </div>
+    </div>
+
+    <div class="step">
+        <h2>User Confirms Booking</h2>
+        <div class="sequence">
+            <div class="component">User</div>
+            <div class="arrow"></div>
+            <div class="component">API Gateway</div>
+            <div class="arrow"></div>
+            <div class="component">Booking Service</div>
+            <div class="arrow"></div>
+            <div class="component">Ticket Service</div>
+            <div class="arrow"></div>
+            <div class="component">Database</div>
+        </div>
+    </div>
+
+    <div class="step">
+        <h2>Send Notification</h2>
+        <div class="sequence">
+            <div class="component">Booking Service</div>
+            <div class="arrow"></div>
+            <div class="component">Notification Service</div>
+            <div class="arrow"></div>
+            <div class="component">Email Service</div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
