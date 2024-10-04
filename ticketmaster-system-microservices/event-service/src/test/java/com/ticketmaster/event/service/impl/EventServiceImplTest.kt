@@ -117,4 +117,16 @@ class EventServiceImplTest {
         verify(eventRepository, times(1)).findById(EVENT_ID)
     }
 
+    @Test
+    fun `test get event not found`() {
+        whenever(eventRepository.findById(1L)).thenReturn(Optional.empty())
+
+        assertThrows<EventNotFoundException> {
+            eventServiceImpl.getEvent(1L).get()
+        }
+
+        verify(eventRepository, times(1)).findById(1L)
+    }
+
+
 }
