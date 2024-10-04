@@ -90,6 +90,20 @@ class EventServiceImplTest {
         verify(eventRepository, times(1)).save(event)
     }
 
+    @Test
+    fun `test create event venue not found`() {
+        val createRequest = EventCreateRequest(
+            "Rock Concert", "The final match between them",
+            LocalDateTime.now(), LocalDateTime.now().plusHours(2),
+            200000, VENUE_ID, CATEGORY_ID
+        )
 
+        whenever(categoryService.getCategoryById(CATEGORY_ID)).thenReturn(Category())
+        whenever(venueRepository.findById(VENUE_ID)).thenReturn(Optional.empty())
+
+        assertThrows<VenueNotFoundException> {
+            eventServiceImpl.createEvent(createRequest)
+        }
+    }
 
 }
