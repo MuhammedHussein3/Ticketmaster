@@ -188,5 +188,14 @@ class EventServiceImplTest {
         verify(eventRepository, times(1)).delete(event)
     }
 
+    @Test
+    fun `test delete event not found`() {
+        whenever(eventRepository.findById(EVENT_ID)).thenReturn(Optional.empty())
 
+        assertThrows<EventNotFoundException> {
+            eventServiceImpl.deleteEvent(EVENT_ID)
+        }
+
+        verify(eventRepository, never()).delete(any())
+    }
 }
