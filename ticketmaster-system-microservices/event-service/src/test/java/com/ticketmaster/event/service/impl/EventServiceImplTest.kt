@@ -67,4 +67,29 @@ class EventServiceImplTest {
         }
     }
 
+    @Test
+    fun `test create event success`() {
+        val createRequest = EventCreateRequest(
+            "Rock Concert", "The final match between them",
+            LocalDateTime.now(), LocalDateTime.now().plusHours(2),
+            200000, VENUE_ID, CATEGORY_ID
+        )
+
+        val category = Category()
+        val venue = Venue()
+        val event = Event()
+
+        whenever(categoryService.getCategoryById(CATEGORY_ID)).thenReturn(category)
+        whenever(venueRepository.findById(VENUE_ID)).thenReturn(Optional.of(venue))
+        whenever(eventMapper.mapToEvent(createRequest)).thenReturn(event)
+        whenever(eventRepository.save(any())).thenReturn(event)
+
+        val result = eventServiceImpl.createEvent(createRequest)
+
+        assertNotNull(result, "Created event should not be null")
+        verify(eventRepository, times(1)).save(event)
+    }
+
+
+
 }
