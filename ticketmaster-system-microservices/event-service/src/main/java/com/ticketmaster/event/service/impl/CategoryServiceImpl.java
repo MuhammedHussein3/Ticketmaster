@@ -3,6 +3,7 @@ package com.ticketmaster.event.service.impl;
 import com.ticketmaster.event.dto.CategoriesDto;
 import com.ticketmaster.event.dto.CategoryRequest;
 import com.ticketmaster.event.entity.Category;
+import com.ticketmaster.event.exceptions.CategoryNotFoundException;
 import com.ticketmaster.event.mapper.CategoryMapper;
 import com.ticketmaster.event.repository.CategoryRepository;
 import com.ticketmaster.event.service.CategoryService;
@@ -52,7 +53,7 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryRepository.save(category);
     }
 
-    private final void mergeCategoryDetails(Category category, CategoryRequest categoryRequest){
+    private void mergeCategoryDetails(Category category, CategoryRequest categoryRequest){
 
         if (StringUtils.isNotBlank(categoryRequest.name())) {
             category.setName(categoryRequest.name());
@@ -83,9 +84,9 @@ public class CategoryServiceImpl implements CategoryService {
                 .toList();
     }
 
-    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = {NotFoundException.class})
+    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = {CategoryNotFoundException.class})
     private Category findCategory(Integer categoryId){
         return categoryRepository.findById(categoryId)
-                .orElseThrow(()-> new CannotCreateTransactionException(String.format("Category not found with ID:: %d", categoryId)));
+                .orElseThrow(()-> new CategoryNotFoundException(String.format("Category not found with ID:: %d", categoryId)));
     }
 }
