@@ -106,5 +106,16 @@ class VenueServiceImplTest {
         verify(venueRepository, times(1)).findById(1)
     }
 
+    @Test
+    fun `test getVenueById not found`() {
+        whenever(venueRepository.findById(2)).thenReturn(Optional.empty())
+
+        assertThrows(VenueNotFoundException::class.java) {
+            venueService.getVenueById(2)
+        }
+
+        verify(venueRepository, times(1)).findById(2)
+    }
+
 
 }
