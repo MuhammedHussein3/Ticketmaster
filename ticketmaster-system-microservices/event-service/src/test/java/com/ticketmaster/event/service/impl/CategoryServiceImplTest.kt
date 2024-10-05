@@ -64,4 +64,18 @@ class CategoryServiceImplTest {
         verify(categoryRepository, times(1)).save(category)
     }
 
+    @Test
+    fun `getCategoryById should return category when found`() {
+        `when`(categoryRepository.findById(1)).thenReturn(Optional.of(category))
+
+        val result = categoryService.getCategoryById(1)
+
+        assertNotNull(result)
+        assertEquals("Sport", result.name)
+        assertEquals("Sport category description", result.description)
+
+        verify(categoryRepository, times(1)).findById(1)
+    }
+
+
 }
