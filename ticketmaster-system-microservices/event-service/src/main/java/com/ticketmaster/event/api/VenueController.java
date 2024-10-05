@@ -2,6 +2,7 @@ package com.ticketmaster.event.api;
 
 import com.ticketmaster.event.dto.VenueCreateRequest;
 import com.ticketmaster.event.dto.VenueResponse;
+import com.ticketmaster.event.dto.VenueUpdateRequest;
 import com.ticketmaster.event.dto.VenuesDto;
 import com.ticketmaster.event.service.VenueService;
 import jakarta.validation.Valid;
@@ -44,7 +45,7 @@ public class VenueController {
 
     @PutMapping("/{venue-id}")
     public ResponseEntity<VenueResponse> updateVenue(
-            @PathVariable(name = "venue-id") Integer id, @Valid @RequestBody VenueCreateRequest updateRequest
+            @PathVariable(name = "venue-id") Integer id, @Valid @RequestBody VenueUpdateRequest updateRequest
     ) {
         VenueResponse venueResponse = venueService.updateVenue(id, updateRequest);
         return ResponseEntity.ok(venueResponse);
