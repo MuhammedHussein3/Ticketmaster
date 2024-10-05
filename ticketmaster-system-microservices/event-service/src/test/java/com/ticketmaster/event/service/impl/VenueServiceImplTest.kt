@@ -175,5 +175,32 @@ class VenueServiceImplTest {
         verify(venueRepository, never()).delete(any())
     }
 
+    @Test
+    fun `test getAllVenues success`() {
+        val venues = listOf(
+            object : Venues {
+                override fun getName() = "Venue 1"
+                override fun getLocation() = "Location 1"
+                override fun getTotalSeats() = 5000
+            },
+            object : Venues {
+                override fun getName() = "Venue 2"
+                override fun getLocation() = "Location 2"
+                override fun getTotalSeats() = 8000
+            }
+        )
 
+        val expectedVenuesDtoList = venues.map { VenuesDto(it.name, it.location, it.totalSeats) }
+
+        whenever(venueRepository.getAllVenues()).thenReturn(venues)
+
+        val result = venueService.getAllVenues()
+
+        assertNotNull(result)
+        assertEquals(2, result.size)
+        assertEquals(expectedVenuesDtoList[0].location, result[0].location)
+        assertEquals(expectedVenuesDtoList[1].location, result[1].location)
+
+        verify(venueRepository, times(1)).getAllVenues()
+    }
 }
