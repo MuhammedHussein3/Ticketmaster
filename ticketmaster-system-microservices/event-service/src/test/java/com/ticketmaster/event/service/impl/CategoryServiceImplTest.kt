@@ -77,5 +77,17 @@ class CategoryServiceImplTest {
         verify(categoryRepository, times(1)).findById(1)
     }
 
+    @Test
+    fun `getCategoryById should throw exception when category is not found`() {
+        `when`(categoryRepository.findById(2)).thenReturn(Optional.empty())
+
+
+        assertThrows<CategoryNotFoundException> {
+            categoryService.getCategoryById(2)
+        }
+
+        verify(categoryRepository, times(1)).findById(2)
+    }
+
 
 }
