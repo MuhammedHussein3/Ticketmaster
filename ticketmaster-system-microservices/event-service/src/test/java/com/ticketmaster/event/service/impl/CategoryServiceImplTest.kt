@@ -136,5 +136,17 @@ class CategoryServiceImplTest {
         verify(categoryRepository, times(1)).delete(category)
     }
 
+    @Test
+    fun `deleteCategory should throw exception when category is not found`() {
+        `when`(categoryRepository.findById(1)).thenReturn(Optional.empty())
+
+        assertThrows<CategoryNotFoundException> {
+            categoryService.getCategoryById(1)
+        }
+
+        verify(categoryRepository, times(1)).findById(1)
+        verify(categoryRepository, never()).delete(any())
+    }
+
 
 }
