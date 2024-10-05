@@ -126,5 +126,15 @@ class CategoryServiceImplTest {
         verify(categoryRepository, never()).save(any(Category::class.java))
     }
 
+    @Test
+    fun `deleteCategory should delete the category when found`() {
+        `when`(categoryRepository.findById(1)).thenReturn(Optional.of(category))
+
+        categoryService.deleteCategory(1)
+
+        verify(categoryRepository, times(1)).findById(1)
+        verify(categoryRepository, times(1)).delete(category)
+    }
+
 
 }
