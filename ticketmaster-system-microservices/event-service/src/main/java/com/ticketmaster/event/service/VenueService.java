@@ -2,6 +2,7 @@ package com.ticketmaster.event.service;
 
 import com.ticketmaster.event.dto.VenueCreateRequest;
 import com.ticketmaster.event.dto.VenueResponse;
+import com.ticketmaster.event.dto.VenueUpdateRequest;
 import com.ticketmaster.event.dto.VenuesDto;
 import com.ticketmaster.event.entity.Venue;
 
@@ -39,7 +40,7 @@ public interface VenueService {
      * @param updateRequest the request object containing the updated details of the venue
      * @return the response object containing the updated details of the venue
      */
-    VenueResponse updateVenue(Integer id, VenueCreateRequest updateRequest);
+    VenueResponse updateVenue(Integer id, VenueUpdateRequest updateRequest);
 
     /**
      * Deletes a venue based on its ID.

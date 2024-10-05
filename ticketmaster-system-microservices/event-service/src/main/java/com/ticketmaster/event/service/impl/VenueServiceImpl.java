@@ -2,6 +2,7 @@ package com.ticketmaster.event.service.impl;
 
 import com.ticketmaster.event.dto.VenueCreateRequest;
 import com.ticketmaster.event.dto.VenueResponse;
+import com.ticketmaster.event.dto.VenueUpdateRequest;
 import com.ticketmaster.event.dto.VenuesDto;
 import com.ticketmaster.event.entity.Venue;
 import com.ticketmaster.event.exceptions.VenueNotFoundException;
@@ -51,7 +52,7 @@ public class VenueServiceImpl implements VenueService {
     }
 
     @Override
-    public VenueResponse updateVenue(Integer id, VenueCreateRequest updateRequest) {
+    public VenueResponse updateVenue(Integer id, VenueUpdateRequest updateRequest) {
 
         Venue venue = findVenue(id);
 
@@ -62,7 +63,7 @@ public class VenueServiceImpl implements VenueService {
         return mapToResponse(updatedVenue);
     }
 
-    private void mergeVenueDetails(Venue venue, VenueCreateRequest updateRequest) {
+    private void mergeVenueDetails(Venue venue, VenueUpdateRequest updateRequest) {
 
         if (StringUtils.isNotBlank(updateRequest.name())){
             venue.setName(updateRequest.name());
