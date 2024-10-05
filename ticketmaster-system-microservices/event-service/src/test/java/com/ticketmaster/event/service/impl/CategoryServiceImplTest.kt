@@ -89,5 +89,42 @@ class CategoryServiceImplTest {
         verify(categoryRepository, times(1)).findById(2)
     }
 
+    @Test
+    fun `updateCategory should update and return the category successfully`() {
+        val categoryUpdateRequest = CategoryRequest(
+             "Movie",
+             "Movie category description"
+        )
+
+        `when`(categoryRepository.findById(1)).thenReturn(Optional.of(category))
+        `when`(categoryRepository.save(category)).thenReturn(category)
+
+        val result = categoryService.updateCategory(1, categoryUpdateRequest)
+
+        assertNotNull(result)
+        assertEquals("Movie", result.name)
+        assertEquals("Movie category description", result.description)
+
+        verify(categoryRepository, times(1)).save(category)
+    }
+
+    @Test
+    fun `updateCategory should throw exception when category is not found`() {
+        val categoryUpdateRequest = CategoryRequest(
+             "Movie",
+             "Movie category description"
+        )
+
+        `when`(categoryRepository.findById(2)).thenReturn(Optional.empty())
+
+
+        assertThrows<CategoryNotFoundException> {
+            categoryService.getCategoryById(2)
+        }
+
+        verify(categoryRepository, times(1)).findById(2)
+        verify(categoryRepository, never()).save(any(Category::class.java))
+    }
+
 
 }
