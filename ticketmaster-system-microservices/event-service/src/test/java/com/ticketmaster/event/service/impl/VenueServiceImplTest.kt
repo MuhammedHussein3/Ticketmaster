@@ -90,5 +90,21 @@ class VenueServiceImplTest {
         verify(venueRepository, times(1)).save(venue)
     }
 
+    @Test
+    fun `test getVenueById success`() {
+        whenever(venueRepository.findById(1)).thenReturn(Optional.of(venue))
+        whenever(venueMapper.mapToResponse(venue)).thenReturn(venueResponse)
+
+        val result = venueService.getVenueById(1)
+
+        assertNotNull(result)
+        assertEquals("Stadium A", result.name)
+        assertEquals(10000, result.totalSeats)
+        assertEquals("http://location-a.com", result.location)
+        assertEquals("Large Stadium", result.description)
+
+        verify(venueRepository, times(1)).findById(1)
+    }
+
 
 }
