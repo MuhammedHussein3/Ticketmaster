@@ -117,5 +117,29 @@ class VenueServiceImplTest {
         verify(venueRepository, times(1)).findById(2)
     }
 
+    @Test
+    fun `test updateVenue success`() {
+        val updatedVenueResponse = VenueResponse(
+            1,
+             "Stadium B",
+            "Small Stadium",
+             "http://location-b.com",
+             5000
+        )
+
+        whenever(venueRepository.findById(1)).thenReturn(Optional.of(venue))
+        whenever(venueRepository.save(venue)).thenReturn(venue)
+        whenever(venueMapper.mapToResponse(venue)).thenReturn(updatedVenueResponse)
+
+        val result = venueService.updateVenue(1, venueUpdateRequest)
+
+        assertNotNull(result)
+        assertEquals("Stadium B", result.name)
+        assertEquals(5000, result.totalSeats)
+        assertEquals("http://location-b.com", result.location)
+        assertEquals("Small Stadium", result.description)
+
+        verify(venueRepository, times(1)).save(venue)
+    }
 
 }
