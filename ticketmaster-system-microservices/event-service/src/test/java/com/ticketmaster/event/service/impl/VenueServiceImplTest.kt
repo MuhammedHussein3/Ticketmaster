@@ -154,5 +154,14 @@ class VenueServiceImplTest {
         verify(venueRepository, never()).save(any())
     }
 
+    @Test
+    fun `test deleteVenue success`() {
+        whenever(venueRepository.findById(1)).thenReturn(Optional.of(venue))
+
+        venueService.deleteVenue(1)
+
+        verify(venueRepository, times(1)).delete(venue)
+    }
+
 
 }
