@@ -148,5 +148,32 @@ class CategoryServiceImplTest {
         verify(categoryRepository, never()).delete(any())
     }
 
+    @Test
+    fun `getAllCategories should return all categories successfully`() {
+        val categories = listOf(
+            object : Categories {
+                override fun getName() = "Sports"
+                override fun getDescription() = "Sports category description"
+            },
+            object : Categories {
+                override fun getName() = "Music"
+                override fun getDescription() = "Music category description"
+            }
+        )
 
+        val categoriesDto = categories.map {
+            CategoriesDto(it.name, it.description)
+        }
+
+        `when`(categoryRepository.getAllCategories()).thenReturn(categories)
+
+        val result = categoryService.getAllCategories()
+
+        assertNotNull(result)
+        assertEquals(2, result.size)
+        assertEquals("Music", result[1].name)
+        assertEquals("Sports", result[0].name)
+
+        verify(categoryRepository, times(1)).getAllCategories()
+    }
 }
