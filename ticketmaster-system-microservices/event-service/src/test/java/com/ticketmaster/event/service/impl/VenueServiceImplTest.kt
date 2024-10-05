@@ -142,4 +142,17 @@ class VenueServiceImplTest {
         verify(venueRepository, times(1)).save(venue)
     }
 
+    @Test
+    fun `test updateVenue not found`() {
+        whenever(venueRepository.findById(1)).thenReturn(Optional.empty())
+
+        assertThrows(VenueNotFoundException::class.java) {
+            venueService.updateVenue(1, venueUpdateRequest)
+        }
+
+        verify(venueRepository, times(1)).findById(1)
+        verify(venueRepository, never()).save(any())
+    }
+
+
 }
