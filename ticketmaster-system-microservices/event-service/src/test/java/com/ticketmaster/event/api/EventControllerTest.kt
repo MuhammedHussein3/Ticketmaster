@@ -114,5 +114,14 @@ class EventControllerTest {
         verify(eventService, times(1)).updateEvent(eq(eventId), any<EventUpdateRequest>())
     }
 
+    @Test
+    fun `should delete event`() {
+        doNothing().whenever(eventService).deleteEvent(eventId)
 
+        mockMvc.perform(delete("/api/v1/events/$eventId"))
+            .andExpect(status().isOk)
+            .andExpect(content().string("Event with ID:: $eventId delete successfully"))
+
+        verify(eventService, times(1)).deleteEvent(eventId)
+    }
 }
