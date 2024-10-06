@@ -52,4 +52,42 @@ class EventControllerTest {
             .build()
     }
 
+    @Test
+    fun `should create event`() {
+        val request = EventCreateRequest.builder()
+            .name("Sample Event")
+            .description("A sample event description")
+            .startTime(LocalDateTime.of(2024, 10, 10, 10, 0, 0))
+            .endTime(LocalDateTime.of(2024, 10, 10, 12, 0, 0))
+            .availableSeats(1000)
+            .build()
+
+        whenever(eventService.createEvent(any())).thenReturn(event)
+
+        mockMvc.perform(
+            post("/api/v1/events")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request))
+        )
+            .andExpect(status().isCreated)
+            .andExpect(jsonPath("$.id").value(event.id))
+            .andExpect(jsonPath("$.name").value(event.name))
+            .andExpect(jsonPath("$.availableSeats").value(event.availableSeats))
+
+        verify(eventService, times(1)).createEvent(any<EventCreateRequest>())
+    }
+
+    @Test
+    fun `should get event`() {
+        whenever(eventService.getEvent(eventId)).thenReturn(CompletableFuture.completedFuture(event))
+
+        mockMvc.perform(get("/api/v1/events/$eventId"))
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.id").value(event.id))
+            .andExpect(jsonPath("$.name").value(event.name))
+            .andExpect(jsonPath("$.availableSeats").value(event.availableSeats))
+
+        verify(eventService, times(1)).getEvent(eventId)
+    }
+
 }
