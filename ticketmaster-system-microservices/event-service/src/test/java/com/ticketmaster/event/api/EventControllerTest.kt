@@ -90,4 +90,29 @@ class EventControllerTest {
         verify(eventService, times(1)).getEvent(eventId)
     }
 
+    @Test
+    fun `should update event`() {
+        val updateRequest = EventUpdateRequest.builder()
+            .name("Updated Event")
+            .description("Updated event description")
+            .startTime(LocalDateTime.of(2024, 10, 10, 10, 0, 0))
+            .endTime(LocalDateTime.of(2024, 10, 10, 12, 0, 0))
+            .availableSeats(20000)
+            .build()
+
+        whenever(eventService.updateEvent(eq(eventId), any())).thenReturn(existingEvent)
+
+        mockMvc.perform(
+            put("/api/v1/events/{event-id}", eventId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updateRequest))
+        )
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.name").value(existingEvent.name))
+            .andExpect(jsonPath("$.availableSeats").value(existingEvent.availableSeats))
+
+        verify(eventService, times(1)).updateEvent(eq(eventId), any<EventUpdateRequest>())
+    }
+
+
 }
